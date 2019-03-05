@@ -104,5 +104,5 @@ class Card {
 function loadgame() {
 	var testcardimg = document.getElementById("testcard");
 	var testcard = new Card(new Rank(1), new Suit(0), testcardimg);
-	testcard.setMode(4);
+	testcard.setMode(0);
 }
