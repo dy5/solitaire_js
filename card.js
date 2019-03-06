@@ -50,11 +50,11 @@ class Rank {
 }
 
 class Card {
-	constructor(rank, suit, imgObj) {
+	constructor(rank, suit) {
 		this.rank = rank;
 		this.suit = suit;
 		this.selected = false;
-		this.imgObj = imgObj;
+		this.imgObj = document.createElement("img");
 		this.backImgPath = "images/b.gif";
 		this.frontImgPath = "images/" + this.rank.rankImgCode + this.suit.suitImgCode + ".gif";
 	}
@@ -96,13 +96,23 @@ class Card {
 		}
 	}
 
+	setSelected(flag) {
+		if (flag) {
+			this.imgObj.style.border = "solid #0000FF";
+			this.selected = true;
+		} else {
+			this.imgObj.style.border = "none";
+			this.selected = false;
+		}
+	}
+
 
 
 
 }
 
-function loadgame() {
-	var testcardimg = document.getElementById("testcard");
-	var testcard = new Card(new Rank(1), new Suit(0), testcardimg);
-	testcard.setMode(0);
-}
+// function loadgame() {
+// 	var testcardimg = document.getElementById("testcard");
+// 	var testcard = new Card(new Rank(1), new Suit(0), testcardimg);
+// 	testcard.setMode(0);
+// }
