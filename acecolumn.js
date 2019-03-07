@@ -15,13 +15,19 @@ class AceColumn {
 		this.emptyColumnButton.style.width = 50+"px";
 		this.emptyColumnButton.style.height = 20+"px";
 		this.emptyColumnButton.style.position = "absolute";
+		//this.emptyColumnButton.onclick = function(){this.doAction(EMPTYACE, this.emptyColumnButton)};
 
 		this.myPile = new Array();
 		this.mySuit = -1;
 
 		this.emptyColumnButton.style.display = "none";
-		//this.obj.appendChild(this.emptyColumnButton);
+		this.obj.appendChild(this.emptyColumnButton);
 
+	}
+
+	setupOnclick(handler) {
+		var self = this;
+		this.emptyColumnButton.onclick = function(){handler.doAction(EMPTYACE, self.emptyColumnButton)};
 	}
 
 
@@ -30,7 +36,7 @@ class AceColumn {
 		this.myPile.length = 0; //empty the array
 		while (this.obj.firstChild) //empty the column's obj (node)
     		this.obj.removeChild(this.obj.firstChild);
-    	//this.obj.appendChild(this.emptyColumnButton); //add the empty button
+    	this.obj.appendChild(this.emptyColumnButton); //add the empty button back
     	this.emptyColumnButton.style.display = "block";
 	}
 
@@ -68,19 +74,20 @@ class AceColumn {
 
 	acceptCard(c) {
 		var flag = false;
-		if (c.rankInt == 1 && this.isEmpty()) {
+		if (c.rank.rankInt == 1 && this.isEmpty()) {
 			flag = true;
-			this.mySuit = c.suitInt;
+			this.mySuit = c.suit.suitInt;
 			this.emptyColumnButton.style.display = "none";
 
-		} else if (this.myPile.length > 1 && c.suitInt == this.mySuit &&
-			c.rankInt == this.getTop().rankInt+1) {
+		} else if (this.myPile.length > 1 && c.suit.suitInt == this.mySuit &&
+			c.rank.rankInt == this.getTop().rank.rankInt+1) {
 			flag = true;
 			//this.getTop().setVisible(false) ????
 
 		}
 
 		if (flag) {
+			c.imgObj.onclick = function(){this.doAction(ACECOLUMN, c)};
 			c.imgObj.style.position = "absolute";
 			c.imgObj.style.left = "0px";
 			c.imgObj.style.top = "0px";

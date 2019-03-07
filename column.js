@@ -28,8 +28,13 @@ class Column {
 		this.emptyColumnButton.style.left = 73/2-25 + "px";
 		this.emptyColumnButton.style.top = "20 px";
 		this.emptyColumnButton.style.display = "none";
+		
 		//this.obj.appendChild(this.emptyColumnButton);
 
+	}
+
+	setupOnclick(handler) {
+		this.emptyColumnButton.onclick = function(){handler.doAction(EMPTYCOLUMN, this.emptyColumnButton)};
 	}
 	/* Accepts a card coming from the deck */
 	acceptDealtCard(c) {
@@ -55,8 +60,8 @@ class Column {
 		this.faceUp.length = 0;
 		while (this.obj.firstChild) //empty the column's obj (node)
     		this.obj.removeChild(this.obj.firstChild);
-    	//this.obj.appendChild(this.emptyColumnButton); //add the empty button
-    	this.emptyColumnButton.style.display = "block";
+    	this.obj.appendChild(this.emptyColumnButton); //add the empty button
+    	//this.emptyColumnButton.style.display = "block";
     	this.yValue = 0;
 	}
 
@@ -121,9 +126,9 @@ class Column {
 	 	//else if (this.faceUp[this.faceUp.length-1] == cCurrent) {
 	 		//cPrevious = this.faceUp[this.faceUp.length-2];
 	 		cPrevious = this.faceUp[this.faceUp.indexOf(cCurrent) - 1];
-	 		if (   (  ( cPrevious.isRed() && !cCurrent.isRed())      || /* if red, then black is next */
-	 		       (!cPrevious.isRed() && cCurrent.isRed()  ) )      && /* if black, then red is next */
-	 			   (cPrevious.rankInt == cCurrent.rankInt + 1)) {       /* current rank is 1 less than previous rank */
+	 		if (   (  ( cPrevious.suit.isRed() && !cCurrent.suit.isRed())      || /* if red, then black is next */
+	 		       (!cPrevious.suit.isRed() && cCurrent.suit.isRed()  ) )      && /* if black, then red is next */
+	 			   (cPrevious.rank.rankInt == cCurrent.rank.rankInt + 1)) {       /* current rank is 1 less than previous rank */
 	 			cCurrent.setSelected(true);
 	 			return true;
 	 		} else {
@@ -134,9 +139,9 @@ class Column {
 	 	/* recursive case */
 	 	else {
 	 		cNext = this.faceUp[this.faceUp.indexOf(cCurrent)+1];
- 			if (   (  ( cCurrent.isRed() && !cNext.isRed())      || /* if red, then black is next */
- 		       (!cCurrent.isRed() && cNext.isRed()  ) )      && /* if black, then red is next */
- 			   (cCurrent.rankInt == cNext.rankInt + 1)) {       /* current rank is 1 less than previous rank */
+ 			if (   (  ( cCurrent.suit.isRed() && !cNext.suit.isRed())      || /* if red, then black is next */
+ 		       (!cCurrent.suit.isRed() && cNext.suit.isRed()  ) )      && /* if black, then red is next */
+ 			   (cCurrent.rank.rankInt == cNext.rank.rankInt + 1)) {       /* current rank is 1 less than previous rank */
 				/* this card is valid, but check the next */
  			   	cCurrent.setSelected(true);
  			   	return this.selectNextCard(
@@ -173,9 +178,9 @@ class Column {
 	acceptCard(c) {
 		if (this.faceUp.length > 0) {
 			var myBottomCard = this.faceUp[this.faceUp.length-1];
-			if (myBottomCard.rankInt == c.rankInt+1 &&
-				((myBottomCard.isRed() && !c.isRed() ) ||
-				(!myBottomCard.isRed() && c.isRed() ) )   ) {
+			if (myBottomCard.rank.rankInt == c.rank.rankInt+1 &&
+				((myBottomCard.suit.isRed() && !c.suit.isRed() ) ||
+				(!myBottomCard.suit.isRed() && c.suit.isRed() ) )   ) {
 				myBottomCard.setMode(1);
 				c.imgObj.style.left = "0px";
 				c.imgObj.style.top = this.yValue + "px";
@@ -187,7 +192,7 @@ class Column {
 			}
 		}
 		/* if the column is empty, only accept a king */
-		else if (c.rankInt == 13) {
+		else if (c.rank.rankInt == 13) {
 			c.imgObj.style.left = "0px";
 			c.imgObj.style.top = "0px";
 			this.yValue = 30;
@@ -208,7 +213,7 @@ class Column {
 
 		/* case where column is totally empty and user sends
 		 * cards starting with a king */
-		if (otherTopCard.rankInt == 13 && this.faceUp.length == 0 && this.faceDown.length == 0) {
+		if (otherTopCard.rank.rankInt == 13 && this.faceUp.length == 0 && this.faceDown.length == 0) {
 			/* accept all the cards */
 			for (i=0; i<otherCards.length; i++) {
 				c = otherCards[i];
@@ -231,9 +236,9 @@ class Column {
 			return false; //both empty but you didn't give a king as in case 1
 		else {
 			myBottomCard = this.faceUp[this.faceUp.length-1];
-			if (myBottomCard.rankInt == otherTopCard.rankInt + 1 &&
-				((myBottomCard.isRed() && !otherTopCard.isRed()) ||
-				(!myBottomCard.isRed() && otherTopCard.isRed())) ) {
+			if (myBottomCard.rank.rankInt == otherTopCard.rank.rankInt + 1 &&
+				((myBottomCard.suit.isRed() && !otherTopCard.suit.isRed()) ||
+				(!myBottomCard.suit.isRed() && otherTopCard.suit.isRed())) ) {
 				/* accept all the cards, adding them to the end */
 				myBottomCard.setMode(1);
 				for (i=0; i<otherCards.length; i++) {
@@ -299,25 +304,6 @@ class Column {
 
 
 
-
-}
-
-function loadgame() {
-
-	//var testcard = new Card(new Rank(1), new Suit(0));
-	var testcolumn = new Column(4);
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	testcolumn.acceptDealtCard( new Card(new Rank(1), new Suit(0)));
-	document.body.appendChild(testcolumn.obj);
-	console.log(testcolumn==testcolumn);
-	// testcolumn.acceptDealtCard(new Card(new Rank(1), new Suit(0));
-	// testcolumn.acceptDealtCard(new Card(new Rank(1), new Suit(0));
-	// testcolumn.acceptDealtCard(new Card(new Rank(1), new Suit(0));
 
 
 }

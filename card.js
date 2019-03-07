@@ -57,6 +57,16 @@ class Card {
 		this.imgObj = document.createElement("img");
 		this.backImgPath = "images/b.gif";
 		this.frontImgPath = "images/" + this.rank.rankImgCode + this.suit.suitImgCode + ".gif";
+		this.parent = null;
+	}
+
+
+	setParent(obj) {
+		this.parent = obj;
+	}
+
+	getParent() {
+		return this.parent;
 	}
 	/* Sets the size and image the card.
 	 * 0 is a full size front
@@ -72,6 +82,8 @@ class Card {
 		switch (mode) {
 			case 0:
 			this.imgObj.src = this.frontImgPath;
+			this.imgObj.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT+"px, "+0+"px)";
+			this.imgObj.style.position="absolute";
 			break;
 			case 1:
 			this.imgObj.src = this.frontImgPath;

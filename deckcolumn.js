@@ -22,7 +22,12 @@ class DeckColumn {
 		this.emptyColumnButton.style.left = WIDTH/2-25 + "px";
 		this.emptyColumnButton.style.top = HEIGHT/2-10+"px";
 		this.emptyColumnButton.style.display = "none";
+		//this.emptyColumnButton.onclick = function(){this.doAction(EMPTYDECKCOLUMN, this.emptyColumnButton)};
 
+	}
+
+	setupOnclick(handler) {
+		this.emptyColumnButton.onclick = function(){handler.doAction(EMPTYDECKCOLUMN, this.emptyColumnButton)};
 	}
 
 	/* set the draw number */
@@ -51,8 +56,12 @@ class DeckColumn {
 			return this.drawThree(3, 10+WIDTH);
 	}
 
-	acceptDealtCard(c) {
+	acceptDealtCard(c, handler1, handler2) {
 		if (c) {
+			this.fdHandler = handler1;
+			this.fuHandler = handler2;
+			var obj = c;
+			c.imgObj.onclick = this.fdHandler;
 			c.imgObj.style.position = "absolute";
 			c.imgObj.style.left = "0px";
 			c.imgObj.style.top = "0px";
@@ -113,6 +122,8 @@ class DeckColumn {
 				c.imgObj.style.position = "absolute";
 				c.imgObj.style.left = "0px";
 				c.imgObj.style.top = "0px";
+				c.imgObj.onclick = this.fdHandler;
+				//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEDOWN, c)};
 				this.faceDown.push(c);
 
 			}
@@ -135,6 +146,8 @@ class DeckColumn {
 			c.imgObj.style.position = "absolute";
 			c.imgObj.style.left = WIDTH+10+"px";
 			c.imgObj.style.top = "0px";
+			//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEUP, c)};
+			c.imgObj.onclick = this.fuHandler;
 			this.faceUp.unshift(c); //add to the beginning
 			if (this.faceDown.length == 0) {
 				this.emptyColumnButton.style.display = "block";
@@ -161,10 +174,12 @@ class DeckColumn {
 		while(this.faceDown.length > 0 && counter<3) {
 			c = this.faceDown.shift();
 			c.setMode(4);
-			this.faceUp[i].imgObj.style.position = "absolute";
-			this.faceUp[i].imgObj.style.left = cardx+"px";
-			this.faceUp[i].imgObj.style.top = "0px";
+			c.imgObj.style.position = "absolute";
+			c.imgObj.style.left = cardx+"px";
+			c.imgObj.style.top = "0px";
 			cardx += WIDTH_PART;
+			//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEUP, c)};
+			c.imgObj.onclick = this.fuHandler;
 			this.faceUp.unshift(c);
 			counter++;
 		}
