@@ -14,13 +14,13 @@ var DECKFACEUP = 4;
 var DECKFACEDOWN = 5;
 var EMPTYDECKCOLUMN = 6;
 
-//check for bugs
-//draw 3 drawing of cards is bugged
-//menu still needs finished
+var imgPath;
 
 
 class Solitaire {
-	constructor() {
+	constructor(obj, imgPathIn) {
+
+		imgPath = imgPathIn;
 		//set up the html object (should be a div for column)
 		this.obj = document.createElement("div");
 		this.obj.style.width = "625px";
@@ -28,8 +28,6 @@ class Solitaire {
 		this.obj.style.position = "absolute";
 		this.obj.style.left = "0px";
 		this.obj.style.top = "0px";
-
-		//this.obj.style.border = "thick solid #0000FF";
 
 		//setup facedown and faceup card arrays
 		this.column = new Array();
@@ -61,7 +59,6 @@ class Solitaire {
 		this.drawOne.name = "game_type";
 		this.drawOne.type = "radio";
 		this.drawOne.value = 1;
-		//this.drawOne.appendChild(document.createTextNode("Draw 1"));
 		this.drawThree = document.createElement("input");
 		this.drawThree.name = "game_type";
 		this.drawThree.type = "radio";
@@ -73,8 +70,6 @@ class Solitaire {
 		this.btnDeal.value = "Deal";
 		var self = this;
 		this.btnDeal.onclick = function(){self.doAction("deal", self.btnDeal)};
-		//this.btnDeal.onclick = self.doAction;
-		//console.log(this.btnDeal.onclick);
 
 		this.btnReset = document.createElement("input");
 		this.btnReset.name = "reset";
@@ -86,8 +81,6 @@ class Solitaire {
 		this.btnReset.style.left = "545px";
 		this.btnReset.style.top = "0px";
 		this.btnReset.onclick = function(){self.doAction("reset", self.btnReset)};
-		//this.btnReset.onclick = this.dealGame(1);
-
 
 		this.selectPanel = document.createElement("p");
 		this.selectPanel.style.border = "2px solid #0000FF";
@@ -112,7 +105,10 @@ class Solitaire {
 
 		this.setNewState(PREGAME, null);
 		this.numFullAces = 0;
-		document.body.appendChild(this.obj);
+		if (obj==null)
+			document.body.appendChild(this.obj);
+		else
+			obj.appendChild(this.obj);
 
 	}
 
@@ -120,7 +116,6 @@ class Solitaire {
 		var self = this;
 		var i, j;
 		this.deck.populate();
-		//console.log(this.deck.myPile.length);
 		this.deck.shuffle();
 		var makeHandler = function(what, who) {
 			return function() {
@@ -134,10 +129,8 @@ class Solitaire {
 				var c = this.deck.popTop();
 				c.setParent(self.column[i]);
 				var makeHandler
-				//c.imgObj.onclick = function(){self.doAction(COLUMN, c);};
 				c.imgObj.onclick = makeHandler(COLUMN, c);
 				this.column[i].acceptDealtCard(c);
-				//console.log(c);
 			}
 			this.column[i].flip();
 			this.column[i].setupOnclick(self); //help him set up his empty buttons
@@ -154,7 +147,6 @@ class Solitaire {
 		while (!this.deck.isEmpty()) {
 			var c = this.deck.popTop();
 			c.setParent(self.deckColumn);
-			//this.deckColumn.acceptDealtCard(c, makeHandler(DECKFACEDOWN, c), makeHandler(DECKFACEUP, c)); //send in "this" so he can set his onclick up
 			var self = this;
 			this.deckColumn.acceptDealtCard(c, self); //send in "this" so he can set his onclick up
 		}
@@ -174,7 +166,6 @@ class Solitaire {
 			this.aceColumn[i].setVisible(flag);
 		}
 		this.deckColumn.setVisible(flag);
-		//this.btnReset
 		this.setSelectPanelVisible(!flag);
 	}
 
@@ -187,8 +178,6 @@ class Solitaire {
 
 	doAction(whatClicked, obj) {
 		var col1, col2, acecol, btn, card;
-		console.log("WhatClicked: "+whatClicked+" Obj: "+obj+" Current State: "+this.state);
-		console.log(obj);
 
 		if (whatClicked == "reset") {
 			this.setNewState(PREGAME, null);
@@ -431,11 +420,5 @@ class Solitaire {
 		alert('You WON!!!');
 		this.setNewState(PREGAME, null);
 	}
-
-
-
-
-
-
 } //end of class
 

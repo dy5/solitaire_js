@@ -55,8 +55,8 @@ class Card {
 		this.suit = suit;
 		this.selected = false;
 		this.imgObj = document.createElement("img");
-		this.backImgPath = "images/b.gif";
-		this.frontImgPath = "images/" + this.rank.rankImgCode + this.suit.suitImgCode + ".gif";
+		this.backImgPath = imgPath + "b.gif";
+		this.frontImgPath = imgPath + this.rank.rankImgCode + this.suit.suitImgCode + ".gif";
 		this.parent = null;
 	}
 
@@ -136,9 +136,3 @@ class Card {
 
 
 }
-
-// function loadgame() {
-// 	var testcardimg = document.getElementById("testcard");
-// 	var testcard = new Card(new Rank(1), new Suit(0), testcardimg);
-// 	testcard.setMode(0);
-// }

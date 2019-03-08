@@ -23,8 +23,6 @@ class DeckColumn {
 		this.emptyColumnButton.style.top = HEIGHT/2-10+"px";
 		this.emptyColumnButton.style.display = "none";
 		this.emptyColumnButton.parent = this;
-		//this.emptyColumnButton.onclick = function(){this.doAction(EMPTYDECKCOLUMN, this.emptyColumnButton)};
-
 	}
 
 	setupOnclick(handler) {
@@ -57,16 +55,8 @@ class DeckColumn {
 			return this.drawThree(3, 10+WIDTH);
 	}
 
-	//acceptDealtCard(c, handler1, handler2) {
 	acceptDealtCard(c, sol) {
 		if (c) {
-			// var makeHandler = function(what, who) {
-			// 	return function() {
-			// 		sol.doAction(what, who);
-			// 	};
-			// };
-			// c.fdHandler = makeHandler(DECKFACEDOWN, c);
-			// c.fuHandler = makeHandler(DECKFACEUP, c);
 			var obj = c;
 			c.imgObj.onclick = c.fdHandler;
 			c.imgObj.style.position = "absolute";
@@ -100,7 +90,6 @@ class DeckColumn {
 	removeSelected() {
 		var c = this.getSelected();
 		if (c) {
-			//this.obj.removeChild(c);
 			this.faceUp.splice(this.faceUp.indexOf(c), 1);
 		}
 		if (this.faceUp.length > 0) {
@@ -130,13 +119,9 @@ class DeckColumn {
 				c.imgObj.style.left = "0px";
 				c.imgObj.style.top = "0px";
 				c.imgObj.onclick = c.fdHandler;
-				//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEDOWN, c)};
 				this.faceDown.push(c);
 
 			}
-			//do we need?
-			//this.faceDown[0].setVisitiblealsdfjei(true);
-
 			return true;
 		}
 		return false;
@@ -148,13 +133,11 @@ class DeckColumn {
 		if (this.faceDown.length == 0)
 			return this.resetDeck(0);
 		else {
-			//if (this.faceUp.length > 0)
 			c = this.faceDown.shift(); //remove element 0
 			c.setMode(0);
 			c.imgObj.style.position = "absolute";
 			c.imgObj.style.left = WIDTH+10+"px";
 			c.imgObj.style.top = "0px";
-			//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEUP, c)};
 			c.imgObj.onclick = c.fuHandler;
 			this.faceUp.unshift(c); //add to the beginning
 			if (this.faceDown.length == 0) {
@@ -186,7 +169,6 @@ class DeckColumn {
 			c.imgObj.style.left = cardx+"px";
 			c.imgObj.style.top = "0px";
 			cardx += WIDTH_PART;
-			//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEUP, c)};
 			c.imgObj.onclick = c.fuHandler;
 			this.faceUp.unshift(c);
 			counter++;

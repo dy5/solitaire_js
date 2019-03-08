@@ -29,9 +29,6 @@ class Column {
 		this.emptyColumnButton.style.top = "20 px";
 		this.emptyColumnButton.style.display = "none";
 		this.emptyColumnButton.parent = this;
-		
-		//this.obj.appendChild(this.emptyColumnButton);
-
 	}
 
 	setupOnclick(handler) {
@@ -129,8 +126,6 @@ class Column {
 
 	 	/* base case, if this is the last card possible */
 	 	else if (this.faceUp.length-1 == this.faceUp.indexOf(cCurrent)) {
-	 	//else if (this.faceUp[this.faceUp.length-1] == cCurrent) {
-	 		//cPrevious = this.faceUp[this.faceUp.length-2];
 	 		cPrevious = this.faceUp[this.faceUp.indexOf(cCurrent) - 1];
 	 		if (   (  ( cPrevious.suit.isRed() && !cCurrent.suit.isRed())      || /* if red, then black is next */
 	 		       (!cPrevious.suit.isRed() && cCurrent.suit.isRed()  ) )      && /* if black, then red is next */
@@ -278,7 +273,6 @@ class Column {
 	removeSelectedCards() {
 		var c, i;
 		var toBeRemoved = new Array();
-		console.log(this.obj);
 
 		//first find selected, add them to the array and deselect them
 
@@ -293,7 +287,6 @@ class Column {
 		//now remove them from faceUp and the internal obj node
 		for (i=0; i<toBeRemoved.length; i++) {
 			this.faceUp.splice(this.faceUp.indexOf(toBeRemoved[i], 1)); //clever way to remove 1 item at the index of toBeRemoved[i]
-			//this.obj.removeChild(toBeRemoved[i].imgObj);
 		}
 
 		if (this.faceUp.length == 0) {

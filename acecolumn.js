@@ -16,8 +16,7 @@ class AceColumn {
 		this.emptyColumnButton.style.height = 20+"px";
 		this.emptyColumnButton.style.position = "absolute";
 		this.emptyColumnButton.parent = this;
-		//this.emptyColumnButton.onclick = function(){this.doAction(EMPTYACE, this.emptyColumnButton)};
-
+		
 		this.myPile = new Array();
 		this.mySuit = -1;
 
@@ -57,7 +56,6 @@ class AceColumn {
 			this.emptyColumnButton.style.display = "block";
 			this.mySuit = -1;
 		}
-		//else set the current last card to visible?
 	}
 
 /* deselects the (only) selected card of the acecolumn */
@@ -85,8 +83,6 @@ class AceColumn {
 		} else if (this.myPile.length > 0 && c.suit.suitInt == this.mySuit &&
 			c.rank.rankInt == this.getTop().rank.rankInt+1) {
 			flag = true;
-			//this.getTop().setVisible(false) ????
-
 		}
 
 		if (flag) {
