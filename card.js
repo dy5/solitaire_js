@@ -60,6 +60,18 @@ class Card {
 		this.parent = null;
 	}
 
+	setUpHandlers(sol) {
+		var makeHandler = function(what, who) {
+			return function() {
+				sol.doAction(what, who);
+			};
+		};
+		this.fdHandler = makeHandler(DECKFACEDOWN, this);
+		this.fuHandler = makeHandler(DECKFACEUP, this);
+		this.aceHandler = makeHandler(ACECOLUMN, this);
+		this.colHandler = makeHandler(COLUMN, this);
+	}
+
 
 	setParent(obj) {
 		this.parent = obj;
@@ -76,7 +88,7 @@ class Card {
 	 * 4 is the left side of the front
 	 */
 	setMode(mode) {
-		this.theMode = 0;
+		this.theMode = mode;
 		this.imgObj.height = HEIGHT;
 		this.imgObj.width = WIDTH;
 		switch (mode) {
@@ -92,6 +104,8 @@ class Card {
 			break;
 			case 2:
 			this.imgObj.src = this.backImgPath;
+			this.imgObj.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT+"px, "+0+"px)";
+			this.imgObj.style.position="absolute";
 			break;
 			case 3:
 			this.imgObj.src = this.backImgPath;
@@ -110,7 +124,7 @@ class Card {
 
 	setSelected(flag) {
 		if (flag) {
-			this.imgObj.style.border = "solid #0000FF";
+			this.imgObj.style.border = "2px solid #0000FF";
 			this.selected = true;
 		} else {
 			this.imgObj.style.border = "none";

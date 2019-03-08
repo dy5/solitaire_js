@@ -1,8 +1,9 @@
 
 /* A deck of 52 playing cards */
 class Deck {
-	constructor() {
+	constructor(sol) {
 		this.myPile = new Array();
+		this.sol = sol;
 
 	}
 
@@ -41,8 +42,12 @@ class Deck {
 		this.myPile.length = 0;
 		var r, s;
 		for (s=0; s<4; s++)
-			for (r=1; r<14; r++)
-				this.myPile.push(new Card(new Rank(r), new Suit(s)));
+			for (r=1; r<14; r++) {
+				var card = new Card(new Rank(r), new Suit(s));
+				card.setUpHandlers(this.sol);
+				this.myPile.push(card);
+
+			}
 	}
 
 	isEmpty() {

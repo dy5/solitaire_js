@@ -14,8 +14,11 @@ var DECKFACEUP = 4;
 var DECKFACEDOWN = 5;
 var EMPTYDECKCOLUMN = 6;
 
-//need card.getParent
-//need empty button.getParent
+//check for bugs
+//draw 3 drawing of cards is bugged
+//menu still needs finished
+
+
 class Solitaire {
 	constructor() {
 		//set up the html object (should be a div for column)
@@ -31,7 +34,7 @@ class Solitaire {
 		//setup facedown and faceup card arrays
 		this.column = new Array();
 		this.aceColumn = new Array();
-		this.deck = new Deck();
+		this.deck = new Deck(this);
 		this.deckColumn = new DeckColumn();
 		this.obj.appendChild(this.deckColumn.obj);
 
@@ -58,10 +61,12 @@ class Solitaire {
 		this.drawOne.name = "game_type";
 		this.drawOne.type = "radio";
 		this.drawOne.value = 1;
+		//this.drawOne.appendChild(document.createTextNode("Draw 1"));
 		this.drawThree = document.createElement("input");
 		this.drawThree.name = "game_type";
 		this.drawThree.type = "radio";
 		this.drawThree.value = 3;
+		this.drawThree.checked = true;
 		this.btnDeal = document.createElement("input");
 		this.btnDeal.name = "deal";
 		this.btnDeal.type = "button";
@@ -76,24 +81,30 @@ class Solitaire {
 		this.btnReset.type = "button";
 		this.btnReset.value = "Reset";
 		this.btnReset.style.width = "75px";
-		this.btnReset.style.height = "17px";
+		//this.btnReset.style.height = "17px";
 		this.btnReset.style.position = "absolute";
 		this.btnReset.style.left = "545px";
 		this.btnReset.style.top = "0px";
-		this.btnReset.onclick = function(){self.doAction("reset", null)};
+		this.btnReset.onclick = function(){self.doAction("reset", self.btnReset)};
 		//this.btnReset.onclick = this.dealGame(1);
 
 
 		this.selectPanel = document.createElement("p");
-		this.selectPanel.style.border = "thick solid #0000FF";
+		this.selectPanel.style.border = "2px solid #0000FF";
 		this.selectPanel.style.width = "200px";
 		this.selectPanel.style.height = "100px";
 		this.selectPanel.style.position = "absolute";
 		this.selectPanel.style.left = "200px";
 		this.selectPanel.style.top = "200px";
 
-		this.selectPanel.appendChild(this.drawOne);
-		this.selectPanel.appendChild(this.drawThree);
+		var p = document.createElement("p");
+		p.appendChild(document.createTextNode("Draw 1"));
+		p.appendChild(this.drawOne);
+		p.appendChild(document.createElement("br"));
+		p.appendChild(document.createTextNode("Draw 3"));
+		p.appendChild(this.drawThree);
+
+		this.selectPanel.appendChild(p);
 		this.selectPanel.appendChild(this.btnDeal);
 
 		this.obj.appendChild(this.selectPanel);
@@ -101,6 +112,7 @@ class Solitaire {
 
 		this.setNewState(PREGAME, null);
 		this.numFullAces = 0;
+		document.body.appendChild(this.obj);
 
 	}
 
@@ -142,7 +154,9 @@ class Solitaire {
 		while (!this.deck.isEmpty()) {
 			var c = this.deck.popTop();
 			c.setParent(self.deckColumn);
-			this.deckColumn.acceptDealtCard(c, makeHandler(DECKFACEDOWN, c), makeHandler(DECKFACEUP, c)); //send in "this" so he can set his onclick up
+			//this.deckColumn.acceptDealtCard(c, makeHandler(DECKFACEDOWN, c), makeHandler(DECKFACEUP, c)); //send in "this" so he can set his onclick up
+			var self = this;
+			this.deckColumn.acceptDealtCard(c, self); //send in "this" so he can set his onclick up
 		}
 
 		this.deckColumn.firstRun();
@@ -232,20 +246,20 @@ class Solitaire {
 						card = obj;
 						col1 = this.oldCard.getParent();
 						acecol = card.getParent();
-						if (this.moveAce(acecol, oldCard))
+						if (this.moveAce(acecol, this.oldCard))
 							col1.removeSelectedCards();
 						break;
 					case EMPTYCOLUMN:
 						btn = obj;
 						col1 = this.oldCard.getParent();
-						col2 = btn.getParent();
+						col2 = btn.parent;
 						this.move(col1, col2);
 						break;
 					case EMPTYACE:
 						btn = obj;
 						col1 = this.oldCard.getParent();
-						acecol = btn.getParent();
-						if (this.moveAce(acecol, oldCard))
+						acecol = btn.parent;
+						if (this.moveAce(acecol, this.oldCard))
 							col1.removeSelectedCards();
 						break;
 				} //end of inner switch
@@ -261,13 +275,13 @@ class Solitaire {
 						break;
 					case EMPTYCOLUMN:
 						btn = obj;
-						col1 = btn.getParent();
+						col1 = btn.parent;
 						acecol = this.oldCard.getParent();
 						this.moveFromAce(acecol, col1);
 						break;
 					case EMPTYACE:
 						btn = obj;
-						acecol = btn.getParent();
+						acecol = btn.parent;
 						var source = this.oldCard.getParent();
 						this.moveFromAcetoAce(source, acecol);
 						break;
@@ -284,7 +298,7 @@ class Solitaire {
 						break;
 					case EMPTYCOLUMN:
 						btn = obj;
-						col1 = btn.getParent();
+						col1 = btn.parent;
 						if (this.moveCardtoCol(this.oldCard, col1))
 							this.deckColumn.removeSelected();
 						break;
@@ -296,7 +310,7 @@ class Solitaire {
 						break;
 					case EMPTYACE:
 						btn = obj;
-						acecol = btn.getParent();
+						acecol = btn.parent;
 						if (this.moveAce(acecol, this.oldCard))
 							this.deckColumn.removeSelected();
 						break;
@@ -308,14 +322,16 @@ class Solitaire {
 				this.setNewState(NOTHINGSELECTED, null);
 				break;
 			case PREGAME:
-				var k;
-				if (this.drawOne.selected)
-					k = 1;
-				else
-					k = 3;
-				this.dealGame(k);
-				this.showGame(true);
-				this.setNewState(NOTHINGSELECTED, null);
+				if (whatClicked == "deal") {
+					var k;
+					if (this.drawOne.checked)
+						k = 1;
+					else
+						k = 3;
+					this.dealGame(k);
+					this.showGame(true);
+					this.setNewState(NOTHINGSELECTED, null);
+				}
 				break;
 		} //end of outer switch
 

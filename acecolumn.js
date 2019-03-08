@@ -15,6 +15,7 @@ class AceColumn {
 		this.emptyColumnButton.style.width = 50+"px";
 		this.emptyColumnButton.style.height = 20+"px";
 		this.emptyColumnButton.style.position = "absolute";
+		this.emptyColumnButton.parent = this;
 		//this.emptyColumnButton.onclick = function(){this.doAction(EMPTYACE, this.emptyColumnButton)};
 
 		this.myPile = new Array();
@@ -52,8 +53,10 @@ class AceColumn {
 /* remove the top card (if any) of the ace column */
 	popTop() {
 		this.myPile.pop();
-		if (this.myPile.length == 0)
+		if (this.myPile.length == 0) {
 			this.emptyColumnButton.style.display = "block";
+			this.mySuit = -1;
+		}
 		//else set the current last card to visible?
 	}
 
@@ -79,7 +82,7 @@ class AceColumn {
 			this.mySuit = c.suit.suitInt;
 			this.emptyColumnButton.style.display = "none";
 
-		} else if (this.myPile.length > 1 && c.suit.suitInt == this.mySuit &&
+		} else if (this.myPile.length > 0 && c.suit.suitInt == this.mySuit &&
 			c.rank.rankInt == this.getTop().rank.rankInt+1) {
 			flag = true;
 			//this.getTop().setVisible(false) ????
@@ -87,12 +90,14 @@ class AceColumn {
 		}
 
 		if (flag) {
-			c.imgObj.onclick = function(){this.doAction(ACECOLUMN, c)};
+			c.imgObj.onclick = c.aceHandler;
 			c.imgObj.style.position = "absolute";
 			c.imgObj.style.left = "0px";
 			c.imgObj.style.top = "0px";
 			this.myPile.push(c);
-			this.obj.appendChild(c);
+			this.obj.appendChild(c.imgObj);
+			c.imgObj.onclick = c.aceHandler;
+			c.setParent(this);
 		}
 		return flag;
 	}

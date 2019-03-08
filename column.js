@@ -28,13 +28,15 @@ class Column {
 		this.emptyColumnButton.style.left = 73/2-25 + "px";
 		this.emptyColumnButton.style.top = "20 px";
 		this.emptyColumnButton.style.display = "none";
+		this.emptyColumnButton.parent = this;
 		
 		//this.obj.appendChild(this.emptyColumnButton);
 
 	}
 
 	setupOnclick(handler) {
-		this.emptyColumnButton.onclick = function(){handler.doAction(EMPTYCOLUMN, this.emptyColumnButton)};
+		var self = this;
+		this.emptyColumnButton.onclick = function(){handler.doAction(EMPTYCOLUMN, self.emptyColumnButton)};
 	}
 	/* Accepts a card coming from the deck */
 	acceptDealtCard(c) {
@@ -97,7 +99,7 @@ class Column {
 	 	if (this.selectNextCard(c))
 	 		return true;
 	 	else {
-	 		deselectAll();
+	 		this.deselectAll();
 	 		return false;
 	 	}
 	 }
@@ -114,6 +116,10 @@ class Column {
 	 selectNextCard(cCurrent) {
 	 	var cPrevious;
 	 	var cNext;
+
+	 	//first make sure we selected a faceup card
+	 	if (this.faceUp.indexOf(cCurrent) == -1)
+	 		return false;
 
 	 	/* base case: only 1 card */
 	 	if (this.faceUp.length == 1) {
@@ -186,8 +192,10 @@ class Column {
 				c.imgObj.style.top = this.yValue + "px";
 				this.yValue += 30;
 				c.setMode(0);
-				this.obj.appendChild(c);
+				this.obj.appendChild(c.imgObj);
 				this.faceUp.push(c);
+				c.imgObj.onclick = c.colHandler;
+				c.setParent(this);
 				return true;
 			}
 		}
@@ -197,9 +205,11 @@ class Column {
 			c.imgObj.style.top = "0px";
 			this.yValue = 30;
 			c.setMode(0);
-			this.obj.appendChild(c);
+			this.obj.appendChild(c.imgObj);
 			this.faceUp.push(c);
 			this.emptyColumnButton.style.display = "none";
+			c.imgObj.onclick = c.colHandler;
+			c.setParent(this);
 			return true;
 		}
 		return false; //no conditions met
@@ -224,8 +234,10 @@ class Column {
 					c.setMode(0);
 				else
 					c.setMode(1);
-				this.obj.appendChild(c);
+				this.obj.appendChild(c.imgObj);
 				this.faceUp.push(c);
+				c.imgObj.onclick = c.colHandler;
+				c.setParent(this);
 			}
 			this.emptyColumnButton.style.display = "none";
 			source.removeSelectedCards();
@@ -250,8 +262,10 @@ class Column {
 						c.setMode(0);
 					else
 						c.setMode(1);
-					this.obj.appendChild(c);
+					this.obj.appendChild(c.imgObj);
 					this.faceUp.push(c);
+					c.imgObj.onclick = c.colHandler;
+					c.setParent(this);
 				}
 				source.removeSelectedCards();
 				return true;
@@ -264,6 +278,7 @@ class Column {
 	removeSelectedCards() {
 		var c, i;
 		var toBeRemoved = new Array();
+		console.log(this.obj);
 
 		//first find selected, add them to the array and deselect them
 
@@ -278,7 +293,7 @@ class Column {
 		//now remove them from faceUp and the internal obj node
 		for (i=0; i<toBeRemoved.length; i++) {
 			this.faceUp.splice(this.faceUp.indexOf(toBeRemoved[i], 1)); //clever way to remove 1 item at the index of toBeRemoved[i]
-			this.obj.removeChild(toBeRemoved[i]);
+			//this.obj.removeChild(toBeRemoved[i].imgObj);
 		}
 
 		if (this.faceUp.length == 0) {

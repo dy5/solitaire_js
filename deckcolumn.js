@@ -22,6 +22,7 @@ class DeckColumn {
 		this.emptyColumnButton.style.left = WIDTH/2-25 + "px";
 		this.emptyColumnButton.style.top = HEIGHT/2-10+"px";
 		this.emptyColumnButton.style.display = "none";
+		this.emptyColumnButton.parent = this;
 		//this.emptyColumnButton.onclick = function(){this.doAction(EMPTYDECKCOLUMN, this.emptyColumnButton)};
 
 	}
@@ -41,7 +42,7 @@ class DeckColumn {
 		this.faceUp.length = 0;
 		while (this.obj.firstChild) //empty the column's obj (node)
     		this.obj.removeChild(this.obj.firstChild);
-    	//this.obj.appendChild(this.emptyColumnButton); //add the empty button
+    	this.obj.appendChild(this.emptyColumnButton); //add the empty button
     	this.emptyColumnButton.style.display = "none";
 	}
 
@@ -56,12 +57,18 @@ class DeckColumn {
 			return this.drawThree(3, 10+WIDTH);
 	}
 
-	acceptDealtCard(c, handler1, handler2) {
+	//acceptDealtCard(c, handler1, handler2) {
+	acceptDealtCard(c, sol) {
 		if (c) {
-			this.fdHandler = handler1;
-			this.fuHandler = handler2;
+			// var makeHandler = function(what, who) {
+			// 	return function() {
+			// 		sol.doAction(what, who);
+			// 	};
+			// };
+			// c.fdHandler = makeHandler(DECKFACEDOWN, c);
+			// c.fuHandler = makeHandler(DECKFACEUP, c);
 			var obj = c;
-			c.imgObj.onclick = this.fdHandler;
+			c.imgObj.onclick = c.fdHandler;
 			c.imgObj.style.position = "absolute";
 			c.imgObj.style.left = "0px";
 			c.imgObj.style.top = "0px";
@@ -93,7 +100,7 @@ class DeckColumn {
 	removeSelected() {
 		var c = this.getSelected();
 		if (c) {
-			this.obj.removeChild(c);
+			//this.obj.removeChild(c);
 			this.faceUp.splice(this.faceUp.indexOf(c), 1);
 		}
 		if (this.faceUp.length > 0) {
@@ -122,13 +129,14 @@ class DeckColumn {
 				c.imgObj.style.position = "absolute";
 				c.imgObj.style.left = "0px";
 				c.imgObj.style.top = "0px";
-				c.imgObj.onclick = this.fdHandler;
+				c.imgObj.onclick = c.fdHandler;
 				//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEDOWN, c)};
 				this.faceDown.push(c);
 
 			}
 			//do we need?
 			//this.faceDown[0].setVisitiblealsdfjei(true);
+
 			return true;
 		}
 		return false;
@@ -147,7 +155,7 @@ class DeckColumn {
 			c.imgObj.style.left = WIDTH+10+"px";
 			c.imgObj.style.top = "0px";
 			//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEUP, c)};
-			c.imgObj.onclick = this.fuHandler;
+			c.imgObj.onclick = c.fuHandler;
 			this.faceUp.unshift(c); //add to the beginning
 			if (this.faceDown.length == 0) {
 				this.emptyColumnButton.style.display = "block";
@@ -179,16 +187,16 @@ class DeckColumn {
 			c.imgObj.style.top = "0px";
 			cardx += WIDTH_PART;
 			//c.imgObj.onclick = function(){this.theHandler.doAction(DECKFACEUP, c)};
-			c.imgObj.onclick = this.fuHandler;
+			c.imgObj.onclick = c.fuHandler;
 			this.faceUp.unshift(c);
 			counter++;
 		}
 
 		if (counter<3) {
 			if (this.faceUp.length >= 3)
-				resetDeck(counter);
+				this.resetDeck(counter);
 			else
-				resetDeck(0);
+				this.resetDeck(0);
 			return this.drawThree(3-counter, cardx); //recursive call
 		} else {
 			if (this.faceUp.length > 0)
@@ -199,6 +207,10 @@ class DeckColumn {
 			} else {
 				this.emptyColumnButton.style.display = "block";
 			}
+		}
+
+		for (i=0; i<this.faceUp.length; i++) {
+			this.faceUp[i].imgObj.style.zIndex = this.faceUp.length - i; //set card 0 to be on top, 1 to be next, etc
 		}
 		return true;
 	}
