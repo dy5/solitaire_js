@@ -26,8 +26,8 @@ class Solitaire {
 		this.obj.style.width = "625px";
 		this.obj.style.height = "600px";
 		this.obj.style.position = "absolute";
-		this.obj.style.left = "0px";
-		this.obj.style.top = "0px";
+		this.obj.style.left = "25px";
+		this.obj.style.top = "150px";
 
 		//setup facedown and faceup card arrays
 		this.column = new Array();
@@ -179,7 +179,6 @@ class Solitaire {
 
 	doAction(whatClicked, obj) {
 		var col1, col2, acecol, btn, card;
-		console.log(obj);
 
 		if (whatClicked == "reset") {
 			this.setNewState(PREGAME, null);
