@@ -116,6 +116,7 @@ class Solitaire {
 		var self = this;
 		var i, j;
 		this.deck.populate();
+		this.deck.setupImages();
 		this.deck.shuffle();
 		var makeHandler = function(what, who) {
 			return function() {
@@ -129,7 +130,7 @@ class Solitaire {
 				var c = this.deck.popTop();
 				c.setParent(self.column[i]);
 				var makeHandler
-				c.imgObj.onclick = makeHandler(COLUMN, c);
+				c.outerDiv.onclick = makeHandler(COLUMN, c);
 				this.column[i].acceptDealtCard(c);
 			}
 			this.column[i].flip();
@@ -178,6 +179,7 @@ class Solitaire {
 
 	doAction(whatClicked, obj) {
 		var col1, col2, acecol, btn, card;
+		console.log(obj);
 
 		if (whatClicked == "reset") {
 			this.setNewState(PREGAME, null);

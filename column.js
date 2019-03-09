@@ -12,8 +12,6 @@ class Column {
 		this.obj.style.left = 75*(colNum-1)+50 + "px";
 		this.obj.style.top = "150px";
 
-		//this.obj.style.border = "thick solid #0000FF";
-
 		//setup facedown and faceup card arrays
 		this.faceDown = new Array();
 		this.faceUp = new Array();
@@ -38,16 +36,16 @@ class Column {
 	/* Accepts a card coming from the deck */
 	acceptDealtCard(c) {
 		if (this.faceDown.length < this.colNum && this.faceUp.length == 0) {
-			c.imgObj.style.position = "absolute";
-			c.imgObj.style.left = "0px";
-			c.imgObj.style.top = this.yValue + "px";
+			c.outerDiv.style.position = "absolute";
+			c.outerDiv.style.left = "0px";
+			c.outerDiv.style.top = this.yValue + "px";
 			this.yValue += 5;
 			this.faceDown.unshift(c); //add the the beginning of the array
 			if (this.faceDown.length == this.colNum)
 				c.setMode(2);
 			else
 				c.setMode(3);
-			this.obj.appendChild(c.imgObj);
+			this.obj.appendChild(c.outerDiv);
 			return true;
 		}
 		else
@@ -183,27 +181,27 @@ class Column {
 				((myBottomCard.suit.isRed() && !c.suit.isRed() ) ||
 				(!myBottomCard.suit.isRed() && c.suit.isRed() ) )   ) {
 				myBottomCard.setMode(1);
-				c.imgObj.style.left = "0px";
-				c.imgObj.style.top = this.yValue + "px";
+				c.outerDiv.style.left = "0px";
+				c.outerDiv.style.top = this.yValue + "px";
 				this.yValue += 30;
 				c.setMode(0);
-				this.obj.appendChild(c.imgObj);
+				this.obj.appendChild(c.outerDiv);
 				this.faceUp.push(c);
-				c.imgObj.onclick = c.colHandler;
+				c.outerDiv.onclick = c.colHandler;
 				c.setParent(this);
 				return true;
 			}
 		}
 		/* if the column is empty, only accept a king */
 		else if (c.rank.rankInt == 13) {
-			c.imgObj.style.left = "0px";
-			c.imgObj.style.top = "0px";
+			c.outerDiv.style.left = "0px";
+			c.outerDiv.style.top = "0px";
 			this.yValue = 30;
 			c.setMode(0);
-			this.obj.appendChild(c.imgObj);
+			this.obj.appendChild(c.outerDiv);
 			this.faceUp.push(c);
 			this.emptyColumnButton.style.display = "none";
-			c.imgObj.onclick = c.colHandler;
+			c.outerDiv.onclick = c.colHandler;
 			c.setParent(this);
 			return true;
 		}
@@ -222,16 +220,16 @@ class Column {
 			/* accept all the cards */
 			for (i=0; i<otherCards.length; i++) {
 				c = otherCards[i];
-				c.imgObj.style.left = "0px";
-				c.imgObj.style.top = this.yValue + "px";
+				c.outerDiv.style.left = "0px";
+				c.outerDiv.style.top = this.yValue + "px";
 				this.yValue += 30;
 				if (i==otherCards.length -1) //last card
 					c.setMode(0);
 				else
 					c.setMode(1);
-				this.obj.appendChild(c.imgObj);
+				this.obj.appendChild(c.outerDiv);
 				this.faceUp.push(c);
-				c.imgObj.onclick = c.colHandler;
+				c.outerDiv.onclick = c.colHandler;
 				c.setParent(this);
 			}
 			this.emptyColumnButton.style.display = "none";
@@ -250,16 +248,16 @@ class Column {
 				myBottomCard.setMode(1);
 				for (i=0; i<otherCards.length; i++) {
 					c = otherCards[i];
-					c.imgObj.style.left = "0px";
-					c.imgObj.style.top = this.yValue + "px";
+					c.outerDiv.style.left = "0px";
+					c.outerDiv.style.top = this.yValue + "px";
 					this.yValue += 30;
 					if (i==otherCards.length-1)
 						c.setMode(0);
 					else
 						c.setMode(1);
-					this.obj.appendChild(c.imgObj);
+					this.obj.appendChild(c.outerDiv);
 					this.faceUp.push(c);
-					c.imgObj.onclick = c.colHandler;
+					c.outerDiv.onclick = c.colHandler;
 					c.setParent(this);
 				}
 				source.removeSelectedCards();

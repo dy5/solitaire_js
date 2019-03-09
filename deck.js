@@ -4,7 +4,6 @@ class Deck {
 	constructor(sol) {
 		this.myPile = new Array();
 		this.sol = sol;
-
 	}
 
 
@@ -52,6 +51,28 @@ class Deck {
 
 	isEmpty() {
 		return this.myPile.length == 0;
+	}
+
+	setupImages() {
+		var img = document.createElement("img");
+		img.src = imgPath+"b.gif";
+
+
+		var div = document.createElement("div");
+		div.style.width = WIDTH+"px";
+		div.style.height = HEIGHT+"px";
+		div.style.backgroundImage = "url('"+imgPath+"allcards.png')";
+		var i;
+		for (i=0; i<this.myPile.length; i++) {
+			var clone = div.cloneNode();
+			clone.style.backgroundPosition = (this.myPile[i].rank.rankInt-1)*-1*WIDTH+"px "+this.myPile[i].suit.suitInt*-1*HEIGHT+"px";
+			this.myPile[i].frontImg = clone;
+			this.myPile[i].backImg = img.cloneNode();
+			this.myPile[i].outerDiv.appendChild(clone);
+			this.myPile[i].outerDiv.appendChild(this.myPile[i].backImg);
+			this.myPile[i].backImg.style.display = "none";
+			clone.style.display = "none";
+		}
 	}
 
 }

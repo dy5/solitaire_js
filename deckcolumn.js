@@ -58,12 +58,12 @@ class DeckColumn {
 	acceptDealtCard(c, sol) {
 		if (c) {
 			var obj = c;
-			c.imgObj.onclick = c.fdHandler;
-			c.imgObj.style.position = "absolute";
-			c.imgObj.style.left = "0px";
-			c.imgObj.style.top = "0px";
+			c.outerDiv.onclick = c.fdHandler;
+			c.outerDiv.style.position = "absolute";
+			c.outerDiv.style.left = "0px";
+			c.outerDiv.style.top = "0px";
 			c.setMode(2);
-			this.obj.appendChild(c.imgObj);
+			this.obj.appendChild(c.outerDiv);
 			this.faceDown.push(c);
 			return true;
 		}
@@ -115,10 +115,10 @@ class DeckColumn {
 			while (this.faceUp.length > N) {
 				c = this.faceUp.pop();
 				c.setMode(2);
-				c.imgObj.style.position = "absolute";
-				c.imgObj.style.left = "0px";
-				c.imgObj.style.top = "0px";
-				c.imgObj.onclick = c.fdHandler;
+				c.outerDiv.style.position = "absolute";
+				c.outerDiv.style.left = "0px";
+				c.outerDiv.style.top = "0px";
+				c.outerDiv.onclick = c.fdHandler;
 				this.faceDown.push(c);
 
 			}
@@ -135,10 +135,10 @@ class DeckColumn {
 		else {
 			c = this.faceDown.shift(); //remove element 0
 			c.setMode(0);
-			c.imgObj.style.position = "absolute";
-			c.imgObj.style.left = WIDTH+10+"px";
-			c.imgObj.style.top = "0px";
-			c.imgObj.onclick = c.fuHandler;
+			c.outerDiv.style.position = "absolute";
+			c.outerDiv.style.left = WIDTH+10+"px";
+			c.outerDiv.style.top = "0px";
+			c.outerDiv.onclick = c.fuHandler;
 			this.faceUp.unshift(c); //add to the beginning
 			if (this.faceDown.length == 0) {
 				this.emptyColumnButton.style.display = "block";
@@ -157,19 +157,19 @@ class DeckColumn {
 	drawThree(C, cardx) {
 		var c, counter = 3-C, i;
 		for (i=0; i<this.faceUp.length && i<3 && C==3; i++) {
-			this.faceUp[i].imgObj.style.position = "absolute";
-			this.faceUp[i].imgObj.style.left = WIDTH+10+"px";
-			this.faceUp[i].imgObj.style.top = "0px";
+			this.faceUp[i].outerDiv.style.position = "absolute";
+			this.faceUp[i].outerDiv.style.left = WIDTH+10+"px";
+			this.faceUp[i].outerDiv.style.top = "0px";
 		}
 
 		while(this.faceDown.length > 0 && counter<3) {
 			c = this.faceDown.shift();
 			c.setMode(4);
-			c.imgObj.style.position = "absolute";
-			c.imgObj.style.left = cardx+"px";
-			c.imgObj.style.top = "0px";
+			c.outerDiv.style.position = "absolute";
+			c.outerDiv.style.left = cardx+"px";
+			c.outerDiv.style.top = "0px";
 			cardx += WIDTH_PART;
-			c.imgObj.onclick = c.fuHandler;
+			c.outerDiv.onclick = c.fuHandler;
 			this.faceUp.unshift(c);
 			counter++;
 		}
@@ -192,7 +192,7 @@ class DeckColumn {
 		}
 
 		for (i=0; i<this.faceUp.length; i++) {
-			this.faceUp[i].imgObj.style.zIndex = this.faceUp.length - i; //set card 0 to be on top, 1 to be next, etc
+			this.faceUp[i].outerDiv.style.zIndex = this.faceUp.length - i; //set card 0 to be on top, 1 to be next, etc
 		}
 		return true;
 	}

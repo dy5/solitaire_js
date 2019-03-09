@@ -17,9 +17,9 @@ class Suit {
 	constructor(suitInt) {
 		this.suitInt = suitInt;
 		switch (this.suitInt) {
-		case 0: this.suitString = "Spades"; break;
+		case 0: this.suitString = "Clubs"; break;
 		case 1: this.suitString = "Diamonds"; break;
-		case 2: this.suitString = "Clubs"; break;
+		case 2: this.suitString = "Spades"; break;
 		case 3: this.suitString = "Hearts"; break;
 		default: this.suitString = "Invalid Suit";
 		}
@@ -54,9 +54,9 @@ class Card {
 		this.rank = rank;
 		this.suit = suit;
 		this.selected = false;
-		this.imgObj = document.createElement("img");
-		this.backImgPath = imgPath + "b.gif";
-		this.frontImgPath = imgPath + this.rank.rankImgCode + this.suit.suitImgCode + ".gif";
+		this.outerDiv = document.createElement("div");
+		//this.backImgPath = imgPath + "b.gif";
+		//this.frontImgPath = imgPath + this.rank.rankImgCode + this.suit.suitImgCode + ".gif";
 		this.parent = null;
 	}
 
@@ -89,33 +89,47 @@ class Card {
 	 */
 	setMode(mode) {
 		this.theMode = mode;
-		this.imgObj.height = HEIGHT;
-		this.imgObj.width = WIDTH;
 		switch (mode) {
 			case 0:
-			this.imgObj.src = this.frontImgPath;
-			this.imgObj.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT+"px, "+0+"px)";
-			this.imgObj.style.position="absolute";
+
+			this.backImg.style.display="none";
+			this.frontImg.style.display = "block";
+			this.frontImg.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT+"px, "+0+"px)";
+			this.outerDiv.style.height = HEIGHT+"px";
+			this.outerDiv.style.width = WIDTH+"px";
+
 			break;
 			case 1:
-			this.imgObj.src = this.frontImgPath;
-			this.imgObj.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT_PART_FRONT+"px, "+0+"px)";
-			this.imgObj.style.position="absolute";
+			this.backImg.style.display="none";
+			this.frontImg.style.display = "block";
+			this.frontImg.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT_PART_FRONT+"px, "+0+"px)";
+			this.frontImg.style.position="absolute";
+			this.outerDiv.style.height = HEIGHT_PART_FRONT+"px";
+			this.outerDiv.style.width = WIDTH+"px";
 			break;
 			case 2:
-			this.imgObj.src = this.backImgPath;
-			this.imgObj.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT+"px, "+0+"px)";
-			this.imgObj.style.position="absolute";
+			this.frontImg.style.display = "none";
+			this.backImg.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT+"px, "+0+"px)";
+			this.backImg.style.position="absolute";
+			this.backImg.style.display="block";
+			this.outerDiv.style.height = HEIGHT+"px";
+			this.outerDiv.style.width = WIDTH+"px";
 			break;
 			case 3:
-			this.imgObj.src = this.backImgPath;
-			this.imgObj.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT_PART_BACK+"px, "+0+"px)";
-			this.imgObj.style.position="absolute";
+			this.frontImg.style.display = "none";
+			this.backImg.style.clip="rect("+0+"px, "+WIDTH+"px, "+HEIGHT_PART_BACK+"px, "+0+"px)";
+			this.backImg.style.position="absolute";
+			this.backImg.style.display="block";
+			this.outerDiv.style.height = HEIGHT_PART_BACK+"px";
+			this.outerDiv.style.width = WIDTH+"px";
 			break;
 			case 4:
-			this.imgObj.src = this.frontImgPath;
-			this.imgObj.style.clip="rect("+0+"px, "+WIDTH_PART+"px, "+HEIGHT+"px, "+0+"px)";
-			this.imgObj.style.position="absolute";
+			this.backImg.style.display="none";
+			this.frontImg.style.display = "block";
+			this.frontImg.style.clip="rect("+0+"px, "+WIDTH_PART+"px, "+HEIGHT+"px, "+0+"px)";
+			this.frontImg.style.position="absolute";
+			this.outerDiv.style.height = HEIGHT+"px";
+			this.outerDiv.style.width = WIDTH_PART+"px";
 			break;
 		default:
 			alert("Invalid card mode");
@@ -124,15 +138,13 @@ class Card {
 
 	setSelected(flag) {
 		if (flag) {
-			this.imgObj.style.border = "2px solid #0000FF";
+			this.outerDiv.style.border = "2px solid #0000FF";
 			this.selected = true;
 		} else {
-			this.imgObj.style.border = "none";
+			this.outerDiv.style.border = "none";
 			this.selected = false;
 		}
 	}
-
-
 
 
 }

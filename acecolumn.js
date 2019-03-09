@@ -86,13 +86,13 @@ class AceColumn {
 		}
 
 		if (flag) {
-			c.imgObj.onclick = c.aceHandler;
-			c.imgObj.style.position = "absolute";
-			c.imgObj.style.left = "0px";
-			c.imgObj.style.top = "0px";
+			c.outerDiv.onclick = c.aceHandler;
+			c.outerDiv.style.position = "absolute";
+			c.outerDiv.style.left = "0px";
+			c.outerDiv.style.top = "0px";
+			c.outerDiv.style.zIndex = this.myPile.length;
 			this.myPile.push(c);
-			this.obj.appendChild(c.imgObj);
-			c.imgObj.onclick = c.aceHandler;
+			this.obj.appendChild(c.outerDiv);
 			c.setParent(this);
 		}
 		return flag;
