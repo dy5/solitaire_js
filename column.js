@@ -284,7 +284,7 @@ class Column {
 
 		//now remove them from faceUp and the internal obj node
 		for (i=0; i<toBeRemoved.length; i++) {
-			this.faceUp.splice(this.faceUp.indexOf(toBeRemoved[i]), 1); //clever way to remove 1 item at the index of toBeRemoved[i]
+			this.faceUp.pop(); //simply remove one element from the bottom of faceup for each item to be removed (cards removed must always start at bottom)
 		}
 
 		if (this.faceUp.length == 0) {
